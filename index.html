@@ -17,12 +17,12 @@
       <div id="nebula"></div>
       
       <!-- UI Controls Panel -->
-      <header id="ui-panel" class="glass-panel">
+      <header id="ui-panel" class="glass-panel controls">
         <h1 class="logo">NATION<span>SPHERE</span></h1>
         
-        <div class="controls">
+        <div class="controls-group">
           <div class="layout-selector">
-            <button class="layout-btn active" data-layout="globe">Globe</button>
+            <button class="layout-btn is-active" data-layout="globe">Globe</button>
             <button class="layout-btn" data-layout="galaxy">Galaxy</button>
             <button class="layout-btn" data-layout="orbit">Orbit</button>
             <button class="layout-btn" data-layout="grid">Grid</button>
@@ -54,33 +54,36 @@
 
       <!-- 3D Scene Container -->
       <main id="scene-container">
-        <!-- Nodes will be injected here -->
-        <div id="world-space"></div>
-      </main>
-
-      <!-- Detailed Info Card Modal -->
-      <div id="info-card-overlay" class="hidden">
-        <div class="info-card glass-panel">
-          <button class="close-btn">&times;</button>
-          <div class="card-header">
-            <div class="card-flag" id="card-flag"></div>
-            <div class="card-title">
-              <h2 id="card-name">Country Name</h2>
-              <h3 id="card-capital">Capital</h3>
-            </div>
-          </div>
-          <div class="card-body">
-            <div class="detail-row"><span>Continent:</span> <strong id="card-continent"></strong></div>
-            <div class="detail-row"><span>Population:</span> <strong id="card-population"></strong></div>
-            <div class="detail-row"><span>GDP:</span> <strong id="card-gdp"></strong></div>
-            <div class="detail-row"><span>Currency:</span> <strong id="card-currency"></strong></div>
-            <div class="detail-row"><span>Languages:</span> <strong id="card-languages"></strong></div>
-            <div class="detail-row"><span>Internet Pen.:</span> <strong id="card-internet"></strong></div>
-            <div class="detail-row"><span>Tourism Info:</span> <strong id="card-tourism"></strong></div>
-            <div class="detail-row"><span>Startup Score:</span> <strong id="card-startup"></strong></div>
-          </div>
+        <div id="scene">
+          <div id="scene-content" data-layout="globe"></div>
         </div>
-      </div>
+      </main>
+      
+      <!-- Dynamic Element Template -->
+      <template id="country-card-template">
+        <button class="country-node" aria-label="Country Element">
+          <div class="node-core"></div>
+          <div class="country-label"></div>
+          
+          <div class="country-details glass-panel">
+             <div class="card-header">
+                <div class="card-flag"></div>
+                <div class="card-title">
+                  <h2 class="card-name"></h2>
+                  <h3 class="card-capital"></h3>
+                </div>
+             </div>
+             <div class="card-body">
+                <div class="detail-row"><span>Continent:</span> <strong class="card-continent"></strong></div>
+                <div class="detail-row"><span>Population:</span> <strong class="card-population"></strong></div>
+                <div class="detail-row"><span>GDP:</span> <strong class="card-gdp"></strong></div>
+                <div class="detail-row"><span>Currency:</span> <strong class="card-currency"></strong></div>
+                <div class="detail-row"><span>Languages:</span> <strong class="card-languages"></strong></div>
+             </div>
+          </div>
+        </button>
+      </template>
+
     </div>
     <script type="module" src="/src/main.js"></script>
   </body>
