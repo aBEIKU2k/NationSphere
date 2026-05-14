@@ -50,9 +50,8 @@ $sceneContent.style.setProperty('--grid-cols', cols);
 
 // 2. Anime.js v4 Layout and Animation tracking
 const elementsLayout = createLayout($sceneContent, {
-  duration: 800,
-  easing: spring(1, 80, 10, 0),
-  delay: stagger(30, { start: 0 })
+  duration: 2000,
+  ease: 'inOutExpo', // Matched from article
 });
 
 // Scene wrapper for 3D rotation
@@ -76,7 +75,13 @@ const transformLayout = {
     nodes.forEach(($node, i) => {
       const pos = coords[i];
       $node.style.position = 'absolute';
-      $node.style.transform = `translate3d(${pos.x}px, ${pos.y}px, ${pos.z}px)`;
+      
+      // Calculate rotation to face outward based on the article's math
+      const rotY = Math.atan2(pos.x, pos.z);
+      const rotX = -Math.atan2(pos.y, Math.hypot(pos.x, pos.z));
+      
+      let offsetZ = $node.classList.contains('is-expanded') ? 100 : 0;
+      $node.style.transform = `translate3d(${pos.x}px, ${pos.y}px, ${pos.z}px) rotateY(${rotY}rad) rotateX(${rotX}rad) translateZ(${offsetZ}px)`;
     });
   },
   galaxy: () => {
@@ -85,7 +90,12 @@ const transformLayout = {
     nodes.forEach(($node, i) => {
       const pos = coords[i];
       $node.style.position = 'absolute';
-      $node.style.transform = `translate3d(${pos.x}px, ${pos.y}px, ${pos.z}px)`;
+      
+      const rotY = Math.atan2(pos.x, pos.z);
+      const rotX = -Math.atan2(pos.y, Math.hypot(pos.x, pos.z));
+      
+      let offsetZ = $node.classList.contains('is-expanded') ? 100 : 0;
+      $node.style.transform = `translate3d(${pos.x}px, ${pos.y}px, ${pos.z}px) rotateY(${rotY}rad) rotateX(${rotX}rad) translateZ(${offsetZ}px)`;
     });
   },
   orbit: () => {
@@ -94,7 +104,12 @@ const transformLayout = {
     nodes.forEach(($node, i) => {
       const pos = coords[i];
       $node.style.position = 'absolute';
-      $node.style.transform = `translate3d(${pos.x}px, ${pos.y}px, ${pos.z}px)`;
+      
+      const rotY = Math.atan2(pos.x, pos.z);
+      const rotX = -Math.atan2(pos.y, Math.hypot(pos.x, pos.z));
+      
+      let offsetZ = $node.classList.contains('is-expanded') ? 100 : 0;
+      $node.style.transform = `translate3d(${pos.x}px, ${pos.y}px, ${pos.z}px) rotateY(${rotY}rad) rotateX(${rotX}rad) translateZ(${offsetZ}px)`;
     });
   },
   network: () => {
@@ -103,12 +118,17 @@ const transformLayout = {
     nodes.forEach(($node, i) => {
       const pos = coords[i];
       $node.style.position = 'absolute';
-      $node.style.transform = `translate3d(${pos.x}px, ${pos.y}px, ${pos.z}px)`;
+      
+      const rotY = Math.atan2(pos.x, pos.z);
+      const rotX = -Math.atan2(pos.y, Math.hypot(pos.x, pos.z));
+      
+      let offsetZ = $node.classList.contains('is-expanded') ? 100 : 0;
+      $node.style.transform = `translate3d(${pos.x}px, ${pos.y}px, ${pos.z}px) rotateY(${rotY}rad) rotateX(${rotX}rad) translateZ(${offsetZ}px)`;
     });
   },
   grid: () => {
     $sceneContent.dataset.layout = 'grid';
-    // Clear inline transforms, let CSS Grid handle positioning
+    // Let CSS Grid handle positioning
     nodes.forEach($node => {
       $node.style.position = 'relative';
       $node.style.transform = '';
@@ -132,15 +152,9 @@ createTimer({
     // Apply interpolated rotation to the scene
     $scene.style.transform = `translateZ(-500px) rotateX(${pointer.rx}deg) rotateY(${pointer.ry}deg)`;
     
-    // Billboard labels so they always face the camera
-    const invRotX = -pointer.rx;
-    const invRotY = -pointer.ry;
-    nodes.forEach($node => {
-      const $label = $node.querySelector('.country-label');
-      if ($label && !$node.classList.contains('is-expanded')) {
-        $label.style.transform = `rotateY(${invRotY}deg) rotateX(${invRotX}deg)`;
-      }
-    });
+    // Billboard labels so they always face the camera when NOT using the outward-facing rotation
+    // Since we now applied rotateY and rotateX to face outward, billboarding would break the 3D surface illusion!
+    // But for grid mode, it's flat, so no billboarding needed either.
   }
 });
 
@@ -155,8 +169,10 @@ $layoutBtns.forEach($btn => {
     // Calculate new positions
     transformLayout[currentLayout]();
     
-    // Trigger anime v4 FLIP/Layout animation
-    elementsLayout.update();
+    // Trigger anime v4 FLIP/Layout animation with a stagger
+    elementsLayout.update({
+      delay: stagger([0, 750], { from: 'random' }) // Matched from article snippet
+    });
   });
 });
 
@@ -171,16 +187,8 @@ document.addEventListener('click', (e) => {
     
     $node.classList.toggle('is-expanded');
     
-    // Re-apply base layout to keep nodes in their structure
+    // Re-apply base layout to update positions and Z offsets
     transformLayout[currentLayout]();
-    
-    if ($node.classList.contains('is-expanded') && currentLayout !== 'grid') {
-        // Bring expanded element forward
-        const match = $node.style.transform.match(/translate3d\(([^,]+),\s*([^,]+),\s*([^)]+)\)/);
-        if (match) {
-            $node.style.transform = `translate3d(${match[1]}, ${match[2]}, 300px)`;
-        }
-    }
     
     // Trigger smooth transition
     elementsLayout.update();
