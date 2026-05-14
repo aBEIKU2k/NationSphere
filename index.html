@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Countries in the Universe</title>
+    <!-- Modern typography -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=Outfit:wght@300;500;700&display=swap" rel="stylesheet">
+  </head>
+  <body class="theme-space">
+    <div id="app">
+      <!-- Background elements -->
+      <div id="starfield"></div>
+      <div id="nebula"></div>
+      
+      <!-- UI Controls Panel -->
+      <header id="ui-panel" class="glass-panel">
+        <h1 class="logo">NATION<span>SPHERE</span></h1>
+        
+        <div class="controls">
+          <div class="layout-selector">
+            <button class="layout-btn active" data-layout="globe">Globe</button>
+            <button class="layout-btn" data-layout="galaxy">Galaxy</button>
+            <button class="layout-btn" data-layout="orbit">Orbit</button>
+            <button class="layout-btn" data-layout="grid">Grid</button>
+            <button class="layout-btn" data-layout="network">Network</button>
+          </div>
+          
+          <div class="filters">
+            <input type="text" id="search-input" placeholder="Search countries..." />
+            <select id="theme-selector">
+              <option value="theme-space">Space Mode</option>
+              <option value="theme-earth">Earth Mode</option>
+              <option value="theme-cyberpunk">Cyberpunk Mode</option>
+            </select>
+          </div>
+        </div>
+        
+        <!-- Mini Stats Dashboard -->
+        <div class="stats-dashboard">
+          <div class="stat-item">
+            <span class="stat-label">Total GDP</span>
+            <span class="stat-value" id="stat-gdp">$0</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-label">Population</span>
+            <span class="stat-value" id="stat-pop">0</span>
+          </div>
+        </div>
+      </header>
+
+      <!-- 3D Scene Container -->
+      <main id="scene-container">
+        <!-- Nodes will be injected here -->
+        <div id="world-space"></div>
+      </main>
+
+      <!-- Detailed Info Card Modal -->
+      <div id="info-card-overlay" class="hidden">
+        <div class="info-card glass-panel">
+          <button class="close-btn">&times;</button>
+          <div class="card-header">
+            <div class="card-flag" id="card-flag"></div>
+            <div class="card-title">
+              <h2 id="card-name">Country Name</h2>
+              <h3 id="card-capital">Capital</h3>
+            </div>
+          </div>
+          <div class="card-body">
+            <div class="detail-row"><span>Continent:</span> <strong id="card-continent"></strong></div>
+            <div class="detail-row"><span>Population:</span> <strong id="card-population"></strong></div>
+            <div class="detail-row"><span>GDP:</span> <strong id="card-gdp"></strong></div>
+            <div class="detail-row"><span>Currency:</span> <strong id="card-currency"></strong></div>
+            <div class="detail-row"><span>Languages:</span> <strong id="card-languages"></strong></div>
+            <div class="detail-row"><span>Internet Pen.:</span> <strong id="card-internet"></strong></div>
+            <div class="detail-row"><span>Tourism Info:</span> <strong id="card-tourism"></strong></div>
+            <div class="detail-row"><span>Startup Score:</span> <strong id="card-startup"></strong></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>
